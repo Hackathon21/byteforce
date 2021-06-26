@@ -1,76 +1,148 @@
-//jshint esversion: 6
+//jshint esversion:6
 
 const express = require("express");
-const https = require("https");
 const bodyParser = require("body-parser");
-const request = require("request");
+const mongoose = require("mongoose");
+const _ = require("lodash");
 
 const app = express();
+
+app.set('view engine', 'ejs');
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static("public"));
 
-app.get("/", function(req, res){
-  res.sendFile(__dirname + "/signup.html");
+mongoose.connect("mongodb+srv://TarunSinghal:Tarun123@cluster0.pmc3a.mongodb.net/todolistDB", {useNewUrlParser: true,  useUnifiedTopology: true });
+
+const itemsSchema = {
+  name: String
+};
+
+const Item = mongoose.model("Item", itemsSchema);
+
+
+const item1 = new Item({
+  name: "Welcome to your todolist!"
 });
 
-app.post("/", function(req, res){
-  const firstName = req.body.fName;
-  const lastName = req.body.lName;
-  const emailId = req.body.emailId;
+const item2 = new Item({
+  name: "Hit the + button to add a new item."
+});
 
-  const data = {
-    members: [
-      {
-        email_address: emailId,
-        status: "subscribed",
-        merge_fields: {
-          FNAME: firstName,
-          LNAME: lastName
+const item3 = new Item({
+  name: "<-- Hit this to delete an item."
+});
+
+const defaultItems = [item1, item2, item3];
+
+const listSchema = {
+  name: String,
+  items: [itemsSchema]
+};
+
+const List = mongoose.model("List", listSchema);
+
+app.get("/",function(req,res){
+  res.render("index");
+});
+
+app.post("/", function(req,res){
+  res.redirect("/todolist");
+});
+
+app.get("/todolist", function(req, res) {
+
+  Item.find({}, function(err, foundItems){
+
+    if (foundItems.length === 0) {
+      Item.insertMany(defaultItems, function(err){
+        if (err) {
+          console.log(err);
+        } else {
+          console.log("Successfully saved default items to DB.");
         }
-      }
-    ]
-  };
-  const jsonData = JSON.stringify(data);
-  const url = "https://us7.api.mailchimp.com/3.0/lists/4297802829";
-
-  const options = {
-    method: "POST",
-    auth: "tarun0:d64c2c125bd689b61cdbbab052a4ad20-us7"
-  };
-
-  const request = https.request(url, options, function(response){
-
-    if(response.statusCode === 200){
-      res.sendFile(__dirname + "/success.html");
+      });
+      res.redirect("/todolist");
+    } else {
+      res.render("list", {listTitle: "Today", newListItems: foundItems});
     }
-    else{
-      res.sendFile(__dirname + "/failure.html");
-    }
-
-    response.on("data", function(data){
-      console.log(JSON.parse(data));
-    });
   });
 
-  request.write(jsonData);
-  request.end();
-
 });
 
-app.post("/failure", function(req, res){
-  res.redirect("/");
+app.get("/:customListName", function(req, res){
+  const customListName = _.capitalize(req.params.customListName);
+
+  List.findOne({name: customListName}, function(err, foundList){
+    if (!err){
+      if (!foundList){
+        //Create a new list
+        const list = new List({
+          name: customListName,
+          items: defaultItems
+        });
+        list.save();
+        res.redirect("/" + customListName);
+      } else {
+        //Show an existing list
+
+        res.render("list", {listTitle: foundList.name, newListItems: foundList.items});
+      }
+    }
+  });
 });
 
-app.listen(process.env.PORT || 3000, function(req, res){
-  console.log("signup is ready...");
+app.post("/todolist", function(req, res){
+
+  const itemName = req.body.newItem;
+  const listName = req.body.list;
+
+  const item = new Item({
+    name: itemName
+  });
+
+  if (listName === "Today"){
+    item.save();
+    res.redirect("/todolist");
+  } else {
+    List.findOne({name: listName}, function(err, foundList){
+      foundList.items.push(item);
+      foundList.save();
+      res.redirect("/" + listName);
+    });
+  }
 });
 
+app.post("/delete", function(req, res){
+  const checkedItemId = req.body.checkbox;
+  const listName = req.body.listName;
 
-//mailchimp
+  if (listName === "Today") {
+    Item.findByIdAndRemove(checkedItemId, function(err){
+      if (!err) {
+        console.log("Successfully deleted checked item.");
+        res.redirect("/todolist");
+      }
+    });
+  } else {
+    List.findOneAndUpdate({name: listName}, {$pull: {items: {_id: checkedItemId}}}, function(err, foundList){
+      if (!err){
+        res.redirect("/" + listName);
+      }
+    });
+  }
+});
 
-//API KEY
-//d64c2c125bd689b61cdbbab052a4ad20-us7
+app.get("/about", function(req, res){
+  res.render("about");
+});
 
-//LIST ID
-//4297802829
+let port = process.env.PORT;
+if(port == null || port == ""){
+  port = 3000;
+}
+
+
+app.listen(port, function() {
+  console.log("Server started Successfully");
+});

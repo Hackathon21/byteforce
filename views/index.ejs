@@ -1,84 +1,45 @@
-<!DOCTYPE html>
-<html lang="en" dir="ltr">
+<%- include("partials/header"); -%>
 
-<head>
-  <meta charset="utf-8">
-  <title>AwareYou</title>
+<div class="row">
 
-  <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&family=Ubuntu:wght@300;400;500;700&display=swap" rel="stylesheet">
-  <!-- CSS Stylesheets -->
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-  <link rel="stylesheet" href="css/styles.css">
+  <div class="col-lg-6">
+    <h1 class="big-heading">Schedule your Work anytime, anywhere !</h1>
+    <form class="" action="/" method="post">
+      <button type="submit" class="btn btn-outline-light btn-lg" name="todolist">Your own schedule</button>
+    </form>
 
-  <!-- Font Awesome -->
-  <script defer src="https://use.fontawesome.com/releases/v5.0.7/js/all.js"></script>
+  </div>
 
-  <!-- Bootstrap Scripts -->
-  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+</div>
+</section>
 
-</head>
 
-<body>
-  <section class="colored-section" id="title">
+<section class="colored-section" id="links">
+
+  <div class="container-fluid">
 
     <div class="row">
-      <img class="title-image" src="images/friendship-hands.jpg" alt="friendship">
-    </div>
-    <div class="container-fluid">
-
-      <!-- Nav Bar -->
-
-      <nav class="navbar navbar-expand-lg navbar-dark">
-
-        <a class="navbar-brand" href="">online manager</a>
-
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-
-        <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
-
-          <ul class="navbar-nav ml-auto">
-            <li class="nav-item">
-              <a type="submit" class="nav-link" href="/todolist">Facts</a>
-            </li>
-            <li class="nav-item">
-              <a type="submit" class="nav-link" href="/deadlines">Inspiring Stories</a>
-            </li>
-            <li class="nav-item">
-              <a type="submit" class="nav-link" href="/internships">Near You</a>
-            </li>
-            <li class="nav-item">
-              <a type="submit" class="nav-link" href="/signup">Sign Up</a>
-            </li>
-          </ul>
-
-
-        </div>
-      </nav>
-
-
-      <!-- Title -->
-
-
-      <div class="row">
-
-        <div class="col-lg-8">
-          <h1 class="big-heading">Don't be DEPRESSED of COVID-19, the World is developing!</h1>
-          <a href="/ngos"><button type="button" class="btn btn-info btn-lg browse-button"><i class=""></i> Schedule your work</button></a>
-
-        </div>
-
+      <div class="feature-box col-lg-4">
+        <i class="fas fa-laptop-code"></i>
+        <h3 class="feature-title">Courses</h3>
+        <p></p>
       </div>
 
+      <div class="feature-box col-lg-4">
+        <i class="fas fa-project-diagram"></i>
+        <h3 class="feature-title">Projects</h3>
+        <p></p>
+      </div>
+
+      <div class="feature-box col-lg-4">
+        <i class="far fa-building"></i>
+        <h3 class="feature-title">Internships</h3>
+        <p></p>
+      </div>
     </div>
+  </div>
+</section>
 
 
-  </section>
 
-</body>
-
-</html>
+<%- include("partials/footer") -%>
