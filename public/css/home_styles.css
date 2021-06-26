@@ -10,6 +10,14 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 p {
+  color: #ffffff;
+}
+
+a {
+  color: #ffffff;
+}
+
+.foot{
   color: #8f8f8f;
 }
 
@@ -40,8 +48,8 @@ p {
   color: #fff;
 }
 
-.white-section {
-  background-color: #fff;
+.orange-section {
+  background-color: #5C33F6;
 }
 
 /* Navigation Bar */
